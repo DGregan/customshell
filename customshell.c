@@ -174,8 +174,8 @@ int cmd_cd(char **args)
     fprintf(stderr, "cshell: expected argument to \"cd\"\n");
   } else {
     if (chdir(args[1]) != 0) {
-      perror("cshell");
-    }
+      fprintf(stderr, "cshell: unexpected directory parameter used.\n");
+   }
   }
   return 1;
 }
@@ -275,6 +275,7 @@ char *cshell_read_line(void)
   char *buffer = malloc(sizeof(char) * bufsize);
   int c;
 
+	// Error check for memory allocation
   if (!buffer) {
     fprintf(stderr, "cshell: allocation error\n");
     exit(EXIT_FAILURE);
@@ -318,6 +319,7 @@ char **cshell_split_line(char *line)
   char **tokens = malloc(bufsize * sizeof(char*));
   char *token;
 
+	// Error check for token allocation
   if (!tokens) {
     fprintf(stderr, "cshell: allocation error\n");
     exit(EXIT_FAILURE);
@@ -331,6 +333,7 @@ char **cshell_split_line(char *line)
     if (position >= bufsize) {
       bufsize += CSHELL_TOK_BUFSIZE;
       tokens = realloc(tokens, bufsize * sizeof(char*));
+	    
       if (!tokens) {
         fprintf(stderr, "cshell: allocation error\n");
         exit(EXIT_FAILURE);
@@ -371,8 +374,6 @@ void cshell_loop(void)
  */
 int main(int argc, char **argv)
 {
-  // Load config files, if any.
-
   // Run command loop.
   system("clear");
   cshell_intro();
