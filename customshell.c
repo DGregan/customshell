@@ -8,7 +8,7 @@
 #include <sys/types.h> // Used for gid, uid
 #include <limits.h>
 
-#define NUM_GROUPS_MAX 10
+#define NUM_GROUPS_MAX 10 // Maximum number of groups to be display for cmd_userinfo()
 /*
   Function Declarations for builtin shell commands:
  */
@@ -52,13 +52,25 @@ int cmd_num_builtins() {
   Builtin function implementations.
 */
 
-
+/**
+   @brief - Introduction to CustomShell
+   @param - n/a
+   @return Alawys returns 1, to continue executing
+*/
 
 void cshell_intro()
 {
   printf("======= CUSTOM SHELL INITITATED =======\n");
   printf("Type 'help' to get a list of allowed commands\n");
+  printf("======= CUSTOM SHELL INITITATED =======\n");
+
 }
+
+/**
+   @brief - Allows user to use the 'pwd' command
+   @param - checks if additional parameters are entered and negates them
+   @return Alawys returns 1, to continue executing
+*/
 
 int cmd_pwd(char **args)
 {
@@ -75,6 +87,13 @@ int cmd_pwd(char **args)
   }
   return 1;
 }
+
+
+/**
+   @brief - Displays current date in the format YYYY-MM-DD-HH-MM-SS
+   @param checks if additional parameters are entered and negates them
+   @return Alawys returns 1, to continue executing
+*/
 
 int cmd_date(char **args)
 {
@@ -93,6 +112,12 @@ int cmd_date(char **args)
   return 1;
 }
 
+/**
+   @brief - Displays the ip configuration for Eth0 by default, accepts other Eth ports
+   @param - Accepts ports but displays eth0 by default
+   @return Alawys returns 1, to continue executing
+*/
+
 int cmd_ifconfig(char **args)
 {
   if (args[1] == NULL)
@@ -106,6 +131,12 @@ int cmd_ifconfig(char **args)
   }
   return 1;
 }
+
+/**
+   @brief - Displays UserID, GroupID, username, groupname and Inode of User home directory
+   @param
+   @return Alawys returns 1, to continue executing
+*/
 
 int cmd_userinfo(char **args)
 {
