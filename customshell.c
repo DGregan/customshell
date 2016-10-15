@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-=======
 
-
->>>>>>> bc1590a426a20efb63565e314b57f39c275b1e8c
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
