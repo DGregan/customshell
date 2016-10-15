@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-=======
 
-
->>>>>>> bc1590a426a20efb63565e314b57f39c275b1e8c
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -81,12 +77,8 @@ int cmd_pwd(char **args)
 {
   if (args[1] == NULL) {
     // run pwd command
-    char pwd[1024];
-    if(getcwd(pwd, sizeof(pwd)) !=NULL)
-	printf("PWD:\n %s\n", pwd);
-    else
-	perror("getcwd() error occured");
-  } 
+    system("pwd");
+  }
   else {
     fprintf(stderr, "chsell: unexpected argument to \"pw\"\n");
   }
