@@ -12,3 +12,5 @@ Built in allowed commands: cd, help, exit, pw (pwd), dt (date time set to specif
 ======= CUSTOM SHELL INITITATED =======
  
 Type 'help' to get a list of allowed commands
+ 
+======= CUSTOM SHELL INITITATED =======
