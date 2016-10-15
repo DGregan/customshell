@@ -1,21 +1,14 @@
-/***************************************************************************//**
-
-  @file         main.c
-
-i  @author       Stephen Brennan
-
-  @date         Thursday,  8 January 2015
-
-  @brief        LSH (Libstephen SHell)
-
-*******************************************************************************/
-
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h> // Used for cmd_date
+#include <grp.h> // Used to retrieve group related info
+#include <sys/types.h> // Used for gid, uid
+#include <limits.h>
 
+#define NUM_GROUPS_MAX 10
 /*
   Function Declarations for builtin shell commands:
  */
@@ -24,6 +17,8 @@ int cmd_help(char **args);
 int cmd_exit(char **args);
 int cmd_pwd(char **args);
 int cmd_date(char **args);
+int cmd_ifconfig(char **args);
+int cmd_userinfo(char **args);
 void cshell_intro();
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -32,14 +27,21 @@ char *builtin_str[] = {
   "cd",
   "help",
   "exit",
-  "pw"
+  "pw",
+  "dt",
+  "ifc",
+  "ud"
 };
+
 
 int (*builtin_func[]) (char **) = {
   &cmd_cd,
   &cmd_help,
   &cmd_exit,
-  &cmd_pwd
+  &cmd_pwd,
+  &cmd_date,
+  &cmd_ifconfig,
+  &cmd_userinfo
 };
 
 int cmd_num_builtins() {
@@ -71,14 +73,67 @@ int cmd_pwd(char **args)
   else {
     fprintf(stderr, "chsell: unexpected argument to \"pw\"\n");
   }
-
+  return 1;
 }
 
 int cmd_date(char **args)
 {
   // Check to see a command tail is provided
-
+  if (args[1] == NULL) {
+   time_t cur_time;
+   struct tm *tmp;
+   char buffer[64];
+   time(&cur_time);
+   tmp = localtime(&cur_time);
+   strftime(buffer, 64,"Time and Datei(YYYY-MM-DD-HH-MM-SS): %Y%m%d%H%M%S", tmp);
+   printf("%s\n", buffer);
+   } else {
+     fprintf(stderr, "cshell: unexpected argument to \"pw\"\n");
+   }
+  return 1;
 }
+
+int cmd_ifconfig(char **args)
+{
+  if (args[1] == NULL)
+    system("ifconfig eth0"); // Run command 'ifconfig eth0'
+  else {
+     if (args[1] !=NULL) { // Checks if command tail is provided
+      char ifc_ethx[100]; // New var to hold specific ifc ethX selection
+      sprintf(ifc_ethx, "ifconfig %s",args[1]);
+      system(ifc_ethx); // Run commnad 'ifconfig ethX	
+     }
+  }
+  return 1;
+}
+
+int cmd_userinfo(char **args)
+{
+  if (args[1] == NULL) {
+    struct group *gr;
+    int num_groups, i;
+    gid_t groups[NUM_GROUPS_MAX];
+    num_groups = NUM_GROUPS_MAX;
+
+    if( getgrouplist( getlogin(), getegid(), groups, &num_groups) == -1)
+	printf("Group array is too small: %d\n", num_groups); // Error check for group size
+    
+    // Display UserId and GroupID
+    printf("%d, %s," , geteuid(), getenv("LOGNAME"));
+    // Display all groups registered to this User
+    for(i=0; i< num_groups; i++) {
+	gr = getgrgid(groups[i]);
+	printf(" %s,", gr->gr_name);
+    }
+    // Display home directory
+    printf(" %s\n", getcwd(getenv("HOME"), 1024));
+  }
+  else {
+    fprintf(stderr, "chsell: unexpected argument to \"uid\"\n");
+  }
+  
+}
+
 
 /**
    @brief Bultin command: change directory.
@@ -291,6 +346,7 @@ int main(int argc, char **argv)
   // Load config files, if any.
 
   // Run command loop.
+  system("clear");
   cshell_intro();
   cshell_loop();
 
