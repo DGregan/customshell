@@ -75,7 +75,7 @@ void cshell_intro()
 
 int cmd_pwd(char **args)
 {
-  if (args[1] == NULL) {
+  if (args[1] == NULL) { // Check if command tail provided
     // run pwd command
     system("pwd");
   }
@@ -101,7 +101,7 @@ int cmd_date(char **args)
    char buffer[64];
    time(&cur_time);
    tmp = localtime(&cur_time);
-   strftime(buffer, 64,"Time and Datei(YYYY-MM-DD-HH-MM-SS): %Y%m%d%H%M%S", tmp);
+   strftime(buffer, 64,"Time and Date(YYYY-MM-DD-HH-MM-SS): %Y%m%d%H%M%S", tmp);
    printf("%s\n", buffer);
    } else {
      fprintf(stderr, "cshell: unexpected argument to \"pw\"\n");
@@ -123,7 +123,7 @@ int cmd_ifconfig(char **args)
      if (args[1] !=NULL) { // Checks if command tail is provided
       char ifc_ethx[100]; // New var to hold specific ifc ethX selection
       sprintf(ifc_ethx, "ifconfig %s",args[1]);
-      system(ifc_ethx); // Run commnad 'ifconfig ethX	
+      system(ifc_ethx); // Run command if additional argument added	
      }
   }
   return 1;
