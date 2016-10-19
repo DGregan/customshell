@@ -153,8 +153,8 @@ int cmd_userinfo(char **args)
 	gr = getgrgid(groups[i]);
 	printf(" %s,", gr->gr_name);
     }
-    // Display home directory
-    printf(" %s\n", getcwd(getenv("HOME"), 1024));
+    // Display inode of home director
+    system("ls -id");
   }
   else {
     fprintf(stderr, "chsell: unexpected argument to \"uid\"\n");
